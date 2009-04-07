@@ -25,7 +25,9 @@ void unpackDataChunk_32bit(unsigned char* raw, float* outdata, int nbits,
     char swapem = 0;
     float* farr = (float*) raw;
 
-    swapem = endian() != end;
+    if(end!=INDEPENDANT){
+	    swapem = endian() != end;
+    }
     if (!isChannelInterleaved) {
         for (channel = 0; channel < nchans; channel++) {
             if (swapChannels) {
