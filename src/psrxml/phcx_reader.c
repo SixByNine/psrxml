@@ -1,3 +1,4 @@
+#include <config.h>
 #include <libxml/globals.h>
 #include <libxml/xmlerror.h>
 #include <libxml/parser.h>

@@ -1,3 +1,4 @@
+#include <config.h>
 #include <pthread.h>
 
 #include "psrxml.h"
@@ -38,7 +39,7 @@ int readPsrXMLPrepDataFile(dataFile *dataFile, const char* filename) {
 	dataFile->file = fopen(filename, "rb");
 
 	if (dataFile->file==NULL) {
-		fprintf(stderr,"psrxml: file '%s' cannot be read\n",filename);
+		fprintf(stderr,"psrxml: file '%s' cannot be read\nError %d '%s'\n",filename,errno,strerror(errno));
 		return -1;
 	}
 

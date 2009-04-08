@@ -1,3 +1,4 @@
+#include <config.h>
 #include "psrxml_xml_writing.h"
 #include "phcx.h"
 #include <stdio.h>

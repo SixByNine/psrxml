@@ -1,3 +1,4 @@
+#include <config.h>
 #include "unpack_lookup.h"
 #include <stdlib.h>
 #include <stdio.h>
