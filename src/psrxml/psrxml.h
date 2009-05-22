@@ -257,6 +257,9 @@ void
 void unpackToChannels(float* indata, float** out, int nchans, int nsamp);
 
 void zapDataChunk(float* outData, psrxml* header, int fileNum, int nSamps);
+void deg2sex(double angle, char* string, int ndec);
+void deg2hms(double angle, char* string, int ndec);
+
 
 #ifdef __cplusplus
 }

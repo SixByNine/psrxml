@@ -19,6 +19,7 @@
 
 #endif
 
+
 int readPsrXml(psrxml *output, char* filename) {
 	int v = -1;
 	// declare variables...
@@ -458,4 +459,31 @@ void zapDataChunk(float* outData, psrxml* header, int fileNum, int nSamps) {
 		}
 	}
 
+}
+
+void deg2sex(double angle, char* string, int ndec){
+	int deg,min;
+	double sec,sign;
+	char format[128];	
+
+	if (angle<0.0)
+		sign=-1.0;
+	else
+		sign=+1.0;
+
+	angle=fabs(angle);
+	deg=(int)angle;
+	
+	angle-=(double)deg;
+	angle*=60.0;
+	min=(int)angle;
+	angle-=(double)min;
+	angle*=60.0;
+	sec=angle;
+	sprintf(format,"%%02d:%%02d:%%0%d.%df",ndec+3,ndec);
+	sprintf(string,format,(int)(deg*sign),min,sec);
+}
+
+void deg2hms(double angle, char* string, int ndec){
+	deg2sex(angle/15.0,string,ndec);
 }
