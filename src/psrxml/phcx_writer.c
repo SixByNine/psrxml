@@ -86,6 +86,11 @@ void write_phcx(char* fileName, phcx* cand) {
     strcpy(attr[1], "seconds");
     sprintf(content, "%lf", cand->header.observationLength);
     writeTagAttr(file, &indent, "ObservationLength", attr, 1, content);
+    for (i = 0; i < cand->nextrakey; i++){
+	    strcpy(content,cand->extravalue[i]);
+	    strcpy(attr[0],cand->extrakey[i]);
+	    writeTagAttr(file, &indent, "Extra", attr, 1, content);
+    }
     closeTag(file, &indent, "head"); //</head>
 
 
@@ -260,6 +265,14 @@ void write_phcx(char* fileName, phcx* cand) {
 
             closeTag(file, &indent, "SnrBlock");
         }
+	for (i = 0; i < section->nextrakey; i++){
+		strcpy(content,section->extravalue[i]);
+		strcpy(attr[0],"key");
+		strcpy(attr[1],section->extrakey[i]);
+
+		writeTagAttr(file, &indent, "SecExtra", attr, 1, content);
+	}
+
         closeTag(file, &indent, "Section");
 
 

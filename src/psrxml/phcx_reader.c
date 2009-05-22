@@ -63,8 +63,26 @@ void free_phcx(phcx* thePhcx) {
             free(thePhcx->sections[i].snrBlock.accnIndex);
             free(thePhcx->sections[i].snrBlock.jerkIndex);
         }
+	for (i=0; i < thePhcx->sections[i].nextrakey; i++){
+		free(thePhcx->sections[i].extrakey[i]);
+		free(thePhcx->sections[i].extravalue[i]);
+	}
+	if(thePhcx->sections[i].nextrakey > 0){
+		free(thePhcx->sections[i].extrakey);
+		free(thePhcx->sections[i].extravalue);
+	}
+
     }
     free(thePhcx->sections);
+    for (i=0; i < thePhcx->nextrakey; i++){
+	    free(thePhcx->extrakey[i]);
+	    free(thePhcx->extravalue[i]);
+    }
+    if(thePhcx->nextrakey > 0){
+	    free(thePhcx->extrakey);
+	    free(thePhcx->extravalue);
+    }
+
     free(thePhcx);
 }
 
@@ -74,6 +92,9 @@ phcx* read_phcx(char* filename) {
 
     retval->nsections = 0;
     retval->sections=NULL;
+    retval->nextrakey=0;
+    retval->extrakey=NULL;
+    retval->extravalue=NULL;
 
 
     phcx_reader_state state;
@@ -120,6 +141,8 @@ static void phcx_startElement(void *vs, const xmlChar *name, const xmlChar **att
             if (strcmp((char*) atts[i], "name") == 0) strcpy(state->name, (char*) atts[++i]);
             if (strcmp((char*) atts[i], "min") == 0) sscanf((char*) atts[++i], "%lf", &state->min);
             if (strcmp((char*) atts[i], "max") == 0) sscanf((char*) atts[++i], "%lf", &state->max);
+	    if (strcmp((char*) atts[i], "key") == 0) strcpy(state->key, (char*) atts[++i]);
+
         }
     }
 
@@ -133,7 +156,7 @@ static void phcx_startElement(void *vs, const xmlChar *name, const xmlChar **att
             state->theContent->sections = realloc(state->theContent->sections, sizeof (phcx_section) * state->theContent->nsections);
         }
         state->currentSection = &state->theContent->sections[state->theContent->nsections - 1];
-        state->currentSection->name = malloc(sizeof (char) * strlen(state->name));
+        state->currentSection->name = malloc(sizeof (char) * (strlen(state->name)+1));
         strcpy(state->currentSection->name, state->name);
 	state->currentSection->snrBlock.block = NULL;
 	state->currentSection->subints=NULL;
@@ -142,6 +165,9 @@ static void phcx_startElement(void *vs, const xmlChar *name, const xmlChar **att
 	state->currentSection->nbins=0;
 	state->currentSection->nsubints=0;
 	state->currentSection->nsubbands=0;
+	state->currentSection->nextrakey=0;
+	state->currentSection->extrakey=NULL;
+	state->currentSection->extravalue=NULL;
     }
 
     if (strcmp((char*) name, "Profile") == 0) {
@@ -244,6 +270,23 @@ static void phcx_endElement(void *vs, const xmlChar *name) {
         state->theContent->header.observationLength *= factor;
     }
 
+    if (strcmp((char*) name, "Extra") == 0) {
+	if(state->theContent->nextrakey == 0){
+		// we need to allocate the array
+		state->theContent->nextrakey=1;
+		state->theContent->extrakey=(char**)malloc(sizeof(char*));
+		state->theContent->extravalue=(char**)malloc(sizeof(char*));
+	} else {
+		// we need to expand the array!
+		state->theContent->nextrakey++;
+		state->theContent->extrakey=(char**)realloc(state->theContent->extrakey,sizeof(char*)*state->theContent->nextrakey);
+		state->theContent->extravalue=(char**)realloc(state->theContent->extravalue,sizeof(char*)*state->theContent->nextrakey);
+	}
+	state->theContent->extrakey[state->theContent->nextrakey-1]=(char*)malloc(sizeof(char)*(strlen(state->key)+1));
+	state->theContent->extravalue[state->theContent->nextrakey-1]=(char*)malloc(sizeof(char)*(strlen(content)+1));
+	strcpy(state->theContent->extrakey[state->theContent->nextrakey-1],state->key);
+	strcpy(state->theContent->extravalue[state->theContent->nextrakey-1],content);
+    }
 
 
     /* Section elements */
@@ -506,6 +549,23 @@ static void phcx_endElement(void *vs, const xmlChar *name) {
 
     }
 
+    if (strcmp((char*) name, "SecExtra") == 0) {
+        if(state->currentSection->nextrakey == 0){
+                // we need to allocate the array
+                state->currentSection->nextrakey=1;
+                state->currentSection->extrakey=(char**)malloc(sizeof(char*));
+                state->currentSection->extravalue=(char**)malloc(sizeof(char*));
+        } else {
+                // we need to expand the array!
+                state->currentSection->nextrakey++;
+                state->currentSection->extrakey=(char**)realloc(state->currentSection->extrakey,sizeof(char*)*state->currentSection->nextrakey);
+                state->currentSection->extravalue=(char**)realloc(state->currentSection->extravalue,sizeof(char*)*state->currentSection->nextrakey);
+        }
+        state->currentSection->extrakey[state->currentSection->nextrakey-1]=(char*)malloc(sizeof(char)*(strlen(state->key)+1));
+        state->currentSection->extravalue[state->currentSection->nextrakey-1]=(char*)malloc(sizeof(char)*(strlen(content)+1));
+        strcpy(state->currentSection->extrakey[state->currentSection->nextrakey-1],state->key);
+        strcpy(state->currentSection->extravalue[state->currentSection->nextrakey-1],content);
+    }
 
 
 

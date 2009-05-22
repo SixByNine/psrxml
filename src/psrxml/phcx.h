@@ -49,6 +49,10 @@ typedef struct phcx_section{
 
 	phcx_SNRBlock snrBlock;
 
+	int nextrakey;
+	char** extrakey;
+	char** extravalue;
+
 
 
 }phcx_section;
@@ -58,6 +62,10 @@ typedef struct phcx{
 	phcx_header header;
 	phcx_section* sections;
 	int nsections;
+	int nextrakey;
+	char** extrakey;
+	char** extravalue;
+
 }phcx;
 
 
@@ -75,6 +83,7 @@ typedef struct phcx_reader_state{
 	int nSub;
 	char name[100];
 	char format[10];
+	char key[128];
 	double min;
 	double max;
 

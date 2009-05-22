@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([PSRXML],[1.04],[mkeith@pulsarastronomy.net])
+AC_INIT([PSRXML],[1.05],[mkeith@pulsarastronomy.net])
 
 AC_CONFIG_AUX_DIR([autoconf])
 
