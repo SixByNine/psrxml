@@ -163,6 +163,7 @@ static void phcx_startElement(void *vs, const xmlChar *name, const xmlChar **att
 	state->currentSection->subbands=NULL;
 	state->currentSection->pulseProfile=NULL;
 	state->currentSection->nbins=0;
+	state->currentSection->tsamp=0;
 	state->currentSection->nsubints=0;
 	state->currentSection->nsubbands=0;
 	state->currentSection->nextrakey=0;
