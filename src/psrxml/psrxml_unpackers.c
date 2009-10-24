@@ -65,7 +65,6 @@ void unpackDataChunk_32bit(unsigned char* raw, float* outdata, int nbits,
     }
 
 }
-
 /*
  * Unpacks into an array that increments fastest by bin, then by channel.
  * 
@@ -87,6 +86,162 @@ void unpackDataChunk_1to8bit(unsigned char* raw, float* outdata, int nbits,
         makeLookup(nbits, fsInMSB, isSigned);
     }
     lookupTable = getLookupTable();
+
+    if (!isChannelInterleaved) {
+
+        //		fprintf(stderr,"Non Channel-Interleaved data not yet supported in unpackDataChunk!\n");
+        //		exit(5);
+        sampinc = 8 / nbits;
+
+        for (channel = 0; channel < nchans; channel++) {
+            counter = (channel * nsamps + nsampStart) / sampinc;
+            if (swapChannels)
+                outchan = nchans - channel - 1;
+            else
+                outchan = channel;
+            for (sample = nsampStart; sample < nsampEnd; sample += sampinc) {
+
+                byte = raw[counter];
+                //				printf("%d\n",byte);
+                for (i = 0; i < sampinc; i++) {
+                    // a bit complicated, but this is arranging the data nicely
+                    outdata[(outchan) * nsamps + sample + i]
+                            = lookupTable[nbits][i][byte];
+                }
+                counter++;
+            }
+        }
+        return;
+    }
+
+    chaninc = 8 / nbits;
+
+    //nbytes = nchans*nsamps*nbits /8;
+
+
+    counter = nsampStart * nchans / chaninc;
+    for (sample = nsampStart; sample < nsampEnd; sample++) {
+        for (channel = 0; channel < nchans; channel += chaninc) {
+
+            byte = raw[counter];
+            //				printf("%d\n",byte);
+            for (i = 0; i < chaninc; i++) {
+                // a bit complicated, but this is arranging the data nicely
+                if (swapChannels)
+                    outdata[(nchans - channel - i - 1) * nsamps + sample]
+                        = lookupTable[nbits][i][byte];
+                else
+                    outdata[(channel + i) * nsamps + sample]
+                        = lookupTable[nbits][i][byte];
+
+                //					printf("%02x %d %f\n",(unsigned int)byte,i,lookupTable[nbits][i][(unsigned int)byte]);
+            }
+
+            counter++;
+        }
+    }
+
+}
+/*
+ * Unpacks into an array that increments fastest by bin, then by channel.
+ * 
+ */
+void unpackDataChunk_1to8bit_toshort(unsigned char* raw, unsigned short* outdata, int nbits,
+        int nchans, unsigned int nsamps, char fsInMSB, char isSigned,
+        char isChannelInterleaved, int nsampStart, int nsampEnd,
+        char swapChannels) {
+    int sample;
+    int channel;
+    int counter, i;
+    //	int nbytes;
+    int chaninc, sampinc;
+    int outchan;
+    float ***lookupTable;
+
+    unsigned char byte;
+    if (!checkShortLookup(nbits, fsInMSB, isSigned)) {
+        makeShortLookup(nbits, fsInMSB, isSigned);
+    }
+    lookupTable = getShortLookupTable();
+
+    if (!isChannelInterleaved) {
+
+        //		fprintf(stderr,"Non Channel-Interleaved data not yet supported in unpackDataChunk!\n");
+        //		exit(5);
+        sampinc = 8 / nbits;
+
+        for (channel = 0; channel < nchans; channel++) {
+            counter = (channel * nsamps + nsampStart) / sampinc;
+            if (swapChannels)
+                outchan = nchans - channel - 1;
+            else
+                outchan = channel;
+            for (sample = nsampStart; sample < nsampEnd; sample += sampinc) {
+
+                byte = raw[counter];
+                //				printf("%d\n",byte);
+                for (i = 0; i < sampinc; i++) {
+                    // a bit complicated, but this is arranging the data nicely
+                    outdata[(outchan) * nsamps + sample + i]
+                            = lookupTable[nbits][i][byte];
+                }
+                counter++;
+            }
+        }
+        return;
+    }
+
+    chaninc = 8 / nbits;
+
+    //nbytes = nchans*nsamps*nbits /8;
+
+
+    counter = nsampStart * nchans / chaninc;
+    for (sample = nsampStart; sample < nsampEnd; sample++) {
+        for (channel = 0; channel < nchans; channel += chaninc) {
+
+            byte = raw[counter];
+            //				printf("%d\n",byte);
+            for (i = 0; i < chaninc; i++) {
+                // a bit complicated, but this is arranging the data nicely
+                if (swapChannels)
+                    outdata[(nchans - channel - i - 1) * nsamps + sample]
+                        = lookupTable[nbits][i][byte];
+                else
+                    outdata[(channel + i) * nsamps + sample]
+                        = lookupTable[nbits][i][byte];
+
+                //					printf("%02x %d %f\n",(unsigned int)byte,i,lookupTable[nbits][i][(unsigned int)byte]);
+            }
+
+            counter++;
+        }
+    }
+
+}
+
+
+/*
+ * Unpacks into an array that increments fastest by bin, then by channel.
+ * 
+ */
+void unpackDataChunk_1to8bit_tounsigned(unsigned char* raw, unsigned char* outdata, int nbits,
+        int nchans, unsigned int nsamps, char fsInMSB, char isSigned,
+        char isChannelInterleaved, int nsampStart, int nsampEnd,
+        char swapChannels) {
+    int sample;
+    int channel;
+    int counter, i;
+    //	int nbytes;
+    int chaninc, sampinc;
+    int outchan;
+    float ***lookupTable;
+
+    unsigned char byte;
+    if (!checkUnsignedLookup(nbits, fsInMSB, isSigned)) {
+        makeUnsignedLookup(nbits, fsInMSB, isSigned);
+    }
+    lookupTable = getUnsignedLookupTable();
 
     if (!isChannelInterleaved) {
 
@@ -175,6 +330,26 @@ void unpackDataChunk(unsigned char* raw, float* outData, psrxml* header,
     }
     zapDataChunk(outData, header, fileNum, nSamps);
 
+}
+/*
+ * Splits indata (nchans x nbins) by nsubs subbands.
+ * out needs dimentions (nsubs x (nchans/nsubs))
+ */
+void unpackUnsignedToChannels(unsigned char* indata, unsigned char** out, int nchans, int nsamp) {
+    int i;
+    for (i = 0; i < nchans; i++) {
+        out[i] = (indata + i * nsamp);
+    }
+}
+/*
+ * Splits indata (nchans x nbins) by nsubs subbands.
+ * out needs dimentions (nsubs x (nchans/nsubs))
+ */
+void unpackShortToChannels(unsigned char* indata, unsigned short** out, int nchans, int nsamp) {
+    int i;
+    for (i = 0; i < nchans; i++) {
+        out[i] = (indata + i * nsamp);
+    }
 }
 
 /*

@@ -111,7 +111,7 @@ int readPsrXmlNextDataBlockIntoExistingArray(dataFile *dataFile,
 #ifdef USE_OPENSSL
 
 	//fprintf(stderr,"%s\n",hashStr);
-	if (!psrxml_checkHash(dataFile, buffer, dataFile->currentBlockNumber)) {
+	if (!psrxml_checkHash(dataFile, buffer,read, dataFile->currentBlockNumber)) {
 		fprintf(stderr,"Warning, bad data block %d in file %s\n",dataFile->currentBlockNumber,dataFile->filename);
 	}
 
@@ -124,12 +124,12 @@ int readPsrXmlNextDataBlockIntoExistingArray(dataFile *dataFile,
 #ifdef USE_OPENSSL
 
 char psrxml_getHash(dataFile* dataFile, unsigned char* buffer, char* hashStr,
-		int blockNumber) {
+		unsigned int bufsize) {
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	char *ptr;
 	int i;
 
-	SHA1(buffer, dataFile->blockLength, hash);
+	SHA1(buffer, bufsize, hash);
 	ptr = hashStr;
 	for (i = 0; i < SHA_DIGEST_LENGTH; i++) {
 		sprintf(ptr, "%02x", hash[i]);
@@ -139,7 +139,7 @@ char psrxml_getHash(dataFile* dataFile, unsigned char* buffer, char* hashStr,
 	return 1;
 }
 
-char psrxml_checkHash(dataFile* dataFile, unsigned char* buffer, int blockNumber) {
+char psrxml_checkHash(dataFile* dataFile, unsigned char* buffer, unsigned int bufsize, int blockNumber) {
 	char hashStr[SHA_DIGEST_LENGTH*2+1];
 	//	printf("testy1  %d %d %d\n",blockNumber,dataFile->blockHeaders_length,dataFile->blockHeaders[blockNumber].has_sha1_hash);
 
@@ -147,7 +147,7 @@ char psrxml_checkHash(dataFile* dataFile, unsigned char* buffer, int blockNumber
 			&& dataFile->blockHeaders[blockNumber].has_sha1_hash) {
 		//		printf("testy2\n");
 
-		if (psrxml_getHash(dataFile, buffer, hashStr, blockNumber)) {
+		if (psrxml_getHash(dataFile, buffer, hashStr, bufsize)) {
 			//			printf("testy3\n");
 
 			if (strcmp(dataFile->blockHeaders[blockNumber].sha1_hash, hashStr)

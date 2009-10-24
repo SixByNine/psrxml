@@ -236,9 +236,9 @@ int readPsrXmlSkipNBlocks(dataFile* dataFile, int nblocks);
 #ifdef USE_OPENSSL
 char
 		psrxml_checkHash(dataFile* dataFile, unsigned char* buffer,
-				int blockNumber);
+				unsigned int bufsize, int blocknum);
 char psrxml_getHash(dataFile* dataFile, unsigned char* buffer, char* hashStr,
-		int blockNumber);
+	unsigned int bufsize);
 #endif
 
 char testPsrXml(psrxml *header);

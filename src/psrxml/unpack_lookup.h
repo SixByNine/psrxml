@@ -11,6 +11,16 @@ void freeLookup(int bitspersamp);
 
 char checkLookup(int bitspersamp,int firstSampleIsMSB, int isSigned);
 
+
+unsigned char ***getUnsignedLookupTable();
+	
+void makeUnsignedLookup(int bitspersamp,int firstSampleIsMSB, int isSigned);
+
+void freeUnsignedLookup(int bitspersamp);
+
+char checkUnsignedLookup(int bitspersamp,int firstSampleIsMSB, int isSigned);
+
+
 #ifdef __cplusplus
 }
 #endif
