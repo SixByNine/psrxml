@@ -9,7 +9,9 @@
 #define PHX_HREF_LENGTH 1024
 #define PHX_UNITS_LENGTH 40
 
+#ifdef HAVE_OPENSSL_SHA_H
 #define USE_OPENSSL
+#endif
 
 #define PHX_HEADER_VERSION 1
 #define PSRXML_IO_VERSION 101
@@ -250,10 +252,13 @@ void writePsrXml(psrxml* header, char* fileName);
 
 void clearPsrXmlDoc(psrxml *doc);
 
-void
-		unpackDataChunk(unsigned char* raw, float* outData, psrxml* header,
+void unpackDataChunk(unsigned char* raw, float* outData, psrxml* header,
 				int fileNum, int nSamps, int nsampStart, int nsampEnd,
 				char swapChannels);
+void unpackDataChunk_1to8bit_toshort(unsigned char* raw, unsigned short* outdata, int nbits,
+		        int nchans, unsigned int nsamps, char fsInMSB, char isSigned,
+			        char isChannelInterleaved, int nsampStart, int nsampEnd,
+				        char swapChannels);
 void unpackToChannels(float* indata, float** out, int nchans, int nsamp);
 
 void zapDataChunk(float* outData, psrxml* header, int fileNum, int nSamps);

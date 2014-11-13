@@ -1,4 +1,5 @@
 #include <psrxml.h>
+#include "unpack_lookup.h"
 
 enum endianness endian() {
     int i = 1;
@@ -79,13 +80,13 @@ void unpackDataChunk_1to8bit(unsigned char* raw, float* outdata, int nbits,
     //	int nbytes;
     int chaninc, sampinc;
     int outchan;
-    float ***lookupTable;
+    float ***myLookup;
 
     unsigned char byte;
     if (!checkLookup(nbits, fsInMSB, isSigned)) {
         makeLookup(nbits, fsInMSB, isSigned);
     }
-    lookupTable = getLookupTable();
+    myLookup = getLookupTable();
 
     if (!isChannelInterleaved) {
 
@@ -106,7 +107,7 @@ void unpackDataChunk_1to8bit(unsigned char* raw, float* outdata, int nbits,
                 for (i = 0; i < sampinc; i++) {
                     // a bit complicated, but this is arranging the data nicely
                     outdata[(outchan) * nsamps + sample + i]
-                            = lookupTable[nbits][i][byte];
+                            = myLookup[nbits][i][byte];
                 }
                 counter++;
             }
@@ -129,12 +130,12 @@ void unpackDataChunk_1to8bit(unsigned char* raw, float* outdata, int nbits,
                 // a bit complicated, but this is arranging the data nicely
                 if (swapChannels)
                     outdata[(nchans - channel - i - 1) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
                 else
                     outdata[(channel + i) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
 
-                //					printf("%02x %d %f\n",(unsigned int)byte,i,lookupTable[nbits][i][(unsigned int)byte]);
+                //					printf("%02x %d %f\n",(unsigned int)byte,i,myLookup[nbits][i][(unsigned int)byte]);
             }
 
             counter++;
@@ -156,13 +157,13 @@ void unpackDataChunk_1to8bit_toshort(unsigned char* raw, unsigned short* outdata
     //	int nbytes;
     int chaninc, sampinc;
     int outchan;
-    float ***lookupTable;
+    float ***myLookup;
 
     unsigned char byte;
     if (!checkShortLookup(nbits, fsInMSB, isSigned)) {
         makeShortLookup(nbits, fsInMSB, isSigned);
     }
-    lookupTable = getShortLookupTable();
+    myLookup = getShortLookupTable();
 
     if (!isChannelInterleaved) {
 
@@ -183,7 +184,7 @@ void unpackDataChunk_1to8bit_toshort(unsigned char* raw, unsigned short* outdata
                 for (i = 0; i < sampinc; i++) {
                     // a bit complicated, but this is arranging the data nicely
                     outdata[(outchan) * nsamps + sample + i]
-                            = lookupTable[nbits][i][byte];
+                            = myLookup[nbits][i][byte];
                 }
                 counter++;
             }
@@ -206,12 +207,12 @@ void unpackDataChunk_1to8bit_toshort(unsigned char* raw, unsigned short* outdata
                 // a bit complicated, but this is arranging the data nicely
                 if (swapChannels)
                     outdata[(nchans - channel - i - 1) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
                 else
                     outdata[(channel + i) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
 
-                //					printf("%02x %d %f\n",(unsigned int)byte,i,lookupTable[nbits][i][(unsigned int)byte]);
+                //					printf("%02x %d %f\n",(unsigned int)byte,i,myLookup[nbits][i][(unsigned int)byte]);
             }
 
             counter++;
@@ -235,13 +236,13 @@ void unpackDataChunk_1to8bit_tounsigned(unsigned char* raw, unsigned char* outda
     //	int nbytes;
     int chaninc, sampinc;
     int outchan;
-    float ***lookupTable;
+    float ***myLookup;
 
     unsigned char byte;
     if (!checkUnsignedLookup(nbits, fsInMSB, isSigned)) {
         makeUnsignedLookup(nbits, fsInMSB, isSigned);
     }
-    lookupTable = getUnsignedLookupTable();
+    myLookup = getUnsignedLookupTable();
 
     if (!isChannelInterleaved) {
 
@@ -262,7 +263,7 @@ void unpackDataChunk_1to8bit_tounsigned(unsigned char* raw, unsigned char* outda
                 for (i = 0; i < sampinc; i++) {
                     // a bit complicated, but this is arranging the data nicely
                     outdata[(outchan) * nsamps + sample + i]
-                            = lookupTable[nbits][i][byte];
+                            = myLookup[nbits][i][byte];
                 }
                 counter++;
             }
@@ -285,12 +286,12 @@ void unpackDataChunk_1to8bit_tounsigned(unsigned char* raw, unsigned char* outda
                 // a bit complicated, but this is arranging the data nicely
                 if (swapChannels)
                     outdata[(nchans - channel - i - 1) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
                 else
                     outdata[(channel + i) * nsamps + sample]
-                        = lookupTable[nbits][i][byte];
+                        = myLookup[nbits][i][byte];
 
-                //					printf("%02x %d %f\n",(unsigned int)byte,i,lookupTable[nbits][i][(unsigned int)byte]);
+                //					printf("%02x %d %f\n",(unsigned int)byte,i,myLookup[nbits][i][(unsigned int)byte]);
             }
 
             counter++;

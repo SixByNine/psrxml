@@ -1,0 +1,12 @@
+autoconf/compile
+autoconf/config.guess
+autoconf/config.sub
+autoconf/depcomp
+autoconf/install-sh
+autoconf/libtool.m4
+autoconf/ltmain.sh
+autoconf/ltoptions.m4
+autoconf/ltsugar.m4
+autoconf/ltversion.m4
+autoconf/lt~obsolete.m4
+autoconf/missing

@@ -1,2 +1,2 @@
-SUBDIRS=psrxml tools
+SUBDIRS=psrxml tools tests
 

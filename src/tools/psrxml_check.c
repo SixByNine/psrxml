@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -5,6 +8,8 @@
 
 
 int main(int argc, char** argv){
+
+#ifdef USE_OPENSSL
 	psrxml* header;
 	char infilesname[1024];
 	int read;
@@ -71,5 +76,9 @@ int main(int argc, char** argv){
 	}
 	free(darr);
 	return 0;
+
+#else
+	printf("ERROR: Not compiled with openssl, can't check file\n");
+#endif
 }
 
