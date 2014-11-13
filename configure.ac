@@ -31,7 +31,13 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 
 
-AM_PATH_XML2
+AM_PATH_XML2(2.0.0, have_xml=yes, have_xml=no)
+
+
+if test X$have_xml != Xyes; then
+	AC_ERROR("Can't find your libxml2 installation")
+fi
+
 
 MJK_LIB_CRYPTO
 
@@ -44,6 +50,6 @@ AC_SUBST(XML_CPPFLAGS)
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AM_CONFIG_HEADER([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile src/psrxml/Makefile src/tools/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/psrxml/Makefile src/tools/Makefile src/tests/Makefile])
 
 AC_OUTPUT
