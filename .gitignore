@@ -10,3 +10,7 @@ autoconf/ltsugar.m4
 autoconf/ltversion.m4
 autoconf/lt~obsolete.m4
 autoconf/missing
+src/Makefile.in
+src/psrxml/Makefile.in
+src/tests/Makefile.in
+src/tools/Makefile.in
