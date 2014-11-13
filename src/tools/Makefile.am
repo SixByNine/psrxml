@@ -4,6 +4,6 @@ bin_PROGRAMS=psrxml_tcs phcx_score psrxml_check
 #psrxml_check_SOURCES=psrxml_check.c
 
 LDADD=../psrxml/libpsrxml.la -lm @XML_LIBS@ @OPENSSL_LIBS@
-INCLUDES=-I../psrxml/ @XML_CPPFLAGS@
+AM_CPPFLAGS=-I../psrxml/ @XML_CPPFLAGS@
 
 
