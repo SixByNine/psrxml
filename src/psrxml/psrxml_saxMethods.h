@@ -321,7 +321,7 @@ char phx_processElement(const char* name, phx_reader_state* state, char* content
 		if (strcmp(name, "feed_symetry")==0) {
 			aDouble = atof(content);
 			aDouble = correctPosnUnits(aDouble, state->units, name);
-			state->theContent->receiver.feedSymetry = aDouble;
+			state->theContent->receiver.feedSymmetry = aDouble;
 			return 1;
 		}
 		if (strcmp(name, "cal_phase")==0) {
@@ -346,8 +346,8 @@ char phx_processElement(const char* name, phx_reader_state* state, char* content
 			state->theContent->telescope.longitude = atof(content);
 			return 1;
 		}
-		if (strcmp(name, "lattitude")==0) {
-			state->theContent->telescope.lattitude = atof(content);
+		if (strcmp(name, "latitude")==0) {
+			state->theContent->telescope.latitude = atof(content);
 			return 1;
 		}
 		if (strcmp(name, "x")==0) {

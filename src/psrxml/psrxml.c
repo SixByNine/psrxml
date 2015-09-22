@@ -395,7 +395,7 @@ void clearPsrXmlDoc(psrxml *doc) {
 	doc->receiverBeamNumber=0;
 	strcpy(doc->receiver.name, "UNKNOWN");
 	doc->receiver.calXYPhase=0;
-	doc->receiver.feedSymetry=0;
+	doc->receiver.feedSymmetry=0;
 	doc->receiver.hasCircularFeeds=0;
 	doc->receiver.numberOfPolarisations=0;
 	doc->recordedPol[0]='\0';
@@ -421,7 +421,7 @@ void clearPsrXmlDoc(psrxml *doc) {
 	doc->telescope.y=0;
 	doc->telescope.z=0;
 	doc->telescope.longitude = 0;
-	doc->telescope.lattitude = 0;
+	doc->telescope.latitude = 0;
 	doc->telescope.zenithLimit = 0;
 
 	doc->referenceDm=0;

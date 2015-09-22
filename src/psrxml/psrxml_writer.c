@@ -304,7 +304,7 @@ void writePsrXml(psrxml* header, char* fileName) {
 	strcpy(attr[1], "degrees");
 	sprintf(content, "%lf", header->receiver.calXYPhase);
 	writeTagAttr(file, &indent, "cal_phase", attr, 1, content);
-	sprintf(content, "%lf", header->receiver.feedSymetry);
+	sprintf(content, "%lf", header->receiver.feedSymmetry);
 	writeTagAttr(file, &indent, "feed_symetry", attr, 1, content);
 	sprintf(content, "%lf", header->receiver.fwhm);
 	writeTagAttr(file, &indent, "fwhm", attr, 1, content);
@@ -367,8 +367,8 @@ void writePsrXml(psrxml* header, char* fileName) {
 	writeTagAttr(file, &indent, "zenith_limit", attr, 1, content);
 	sprintf(content, "%lf", header->telescope.longitude);
 	writeTagAttr(file, &indent, "longitude", attr, 1, content);
-	sprintf(content, "%lf", header->telescope.lattitude);
-	writeTagAttr(file, &indent, "lattitude", attr, 1, content);
+	sprintf(content, "%lf", header->telescope.latitude);
+	writeTagAttr(file, &indent, "latitude", attr, 1, content);
 	sprintf(content, "%lf", header->telescope.x);
 	writeTag(file, &indent, "x", content);
 	sprintf(content, "%lf", header->telescope.y);

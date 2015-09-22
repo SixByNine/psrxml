@@ -57,7 +57,7 @@ enum endianness {BIG,LITTLE,INDEPENDANT};
 typedef struct telescope_t {
 	char name[PHX_HREF_LENGTH];
 	//	char uri[PHX_HREF_LENGTH];
-	double longitude, lattitude, zenithLimit;
+	double longitude, latitude, zenithLimit;
 	double x, y, z;
 	int sigprocCode;
 	char tempoCode[80];
@@ -78,7 +78,7 @@ typedef struct receiver_t {
 	char hasCircularFeeds;
 	int numberOfPolarisations;
 	char feedRightHanded;
-	double feedSymetry;
+	double feedSymmetry;
 	double fwhm;
 	double calXYPhase;
 
