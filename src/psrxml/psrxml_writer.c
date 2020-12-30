@@ -1,6 +1,8 @@
 #include <config.h>
 #include <psrxml.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 void closeTag(FILE* file, int* indent, char* tagName) {
 	int i;

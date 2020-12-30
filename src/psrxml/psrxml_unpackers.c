@@ -1,5 +1,7 @@
+#include <stdlib.h>
 #include <psrxml.h>
 #include "unpack_lookup.h"
+#include "short_lookup.h"
 
 enum endianness endian() {
     int i = 1;
