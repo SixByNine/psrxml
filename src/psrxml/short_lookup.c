@@ -1,7 +1,8 @@
-#include <config.h>
-#include "unpack_lookup.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <config.h>
+#include "unpack_lookup.h"
+#include "short_lookup.h"
 
 
 unsigned short **lookupShortTable[9];
@@ -9,6 +10,17 @@ static char lookupShortTableValid[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 unsigned short ***getShortLookupTable(){
 	return lookupShortTable;
+}
+
+void freeShortLookup(int bitspersamp) {
+	int i;
+
+	for (i = 0; i < 8/(bitspersamp); i++) {
+		free(lookupShortTable[bitspersamp][i]);
+	}
+	free(lookupShortTable[bitspersamp]);
+	lookupShortTableValid[bitspersamp] = 0;
+
 }
 
 void makeShortLookup(int bitspersamp, int firstSampleIsMSB, int isSigned) {
@@ -72,17 +84,6 @@ void makeShortLookup(int bitspersamp, int firstSampleIsMSB, int isSigned) {
 		lookupShortTableValid[bitspersamp] = lookupShortTableValid[bitspersamp] | 2;
 	if (firstSampleIsMSB)
 		lookupShortTableValid[bitspersamp] = lookupShortTableValid[bitspersamp] | 4;
-}
-
-void freeShortLookup(int bitspersamp) {
-	int i;
-
-	for (i = 0; i < 8/(bitspersamp); i++) {
-		free(lookupShortTable[bitspersamp][i]);
-	}
-	free(lookupShortTable[bitspersamp]);
-	lookupShortTableValid[bitspersamp] = 0;
-
 }
 
 char checkShortLookup(int bitspersamp, int firstSampleIsMSB, int isSigned) {
